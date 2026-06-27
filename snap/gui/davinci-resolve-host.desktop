@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=DaVinci Resolve (Host Snap)
+GenericName=Video Editor
+Comment=Launch host-installed DaVinci Resolve through a classic snap wrapper
+Exec=davinci-resolve-host %U
+Icon=${SNAP}/meta/gui/davinci-resolve-host.svg
+Terminal=false
+Categories=AudioVideo;Video;AudioVideoEditing;
+MimeType=application/x-resolveproj;
+StartupNotify=true
+

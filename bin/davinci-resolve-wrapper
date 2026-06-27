@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+resolve_root="${DAVINCI_RESOLVE_ROOT:-/opt/resolve}"
+resolve_bin="$resolve_root/bin/resolve"
+
+if [[ ! -x "$resolve_bin" ]]; then
+  cat >&2 <<EOF
+DaVinci Resolve binary was not found or is not executable:
+  $resolve_bin
+
+Install DaVinci Resolve on the host, or set DAVINCI_RESOLVE_ROOT to the host
+installation root.
+EOF
+  exit 127
+fi
+
+if [[ "${DAVINCI_RESOLVE_USE_SYSTEM_GLIB:-1}" != "0" ]]; then
+  system_lib_dir="/lib/x86_64-linux-gnu"
+  preload_libs=()
+
+  for lib in \
+    libglib-2.0.so.0 \
+    libgobject-2.0.so.0 \
+    libgmodule-2.0.so.0 \
+    libgio-2.0.so.0
+  do
+    path="$system_lib_dir/$lib"
+    if [[ -r "$path" ]]; then
+      preload_libs+=("$path")
+    fi
+  done
+
+  if ((${#preload_libs[@]})); then
+    preload_joined="$(IFS=:; echo "${preload_libs[*]}")"
+    if [[ -n "${LD_PRELOAD:-}" ]]; then
+      export LD_PRELOAD="$preload_joined:$LD_PRELOAD"
+    else
+      export LD_PRELOAD="$preload_joined"
+    fi
+  fi
+fi
+
+cd "$resolve_root"
+exec "$resolve_bin" "$@"
+

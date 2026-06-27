@@ -1,0 +1,31 @@
+name: davinci-resolve-host
+base: core24
+version: "0.1.0"
+summary: Local classic snap wrapper for a host-installed DaVinci Resolve
+description: |
+  Launches the host DaVinci Resolve installation from /opt/resolve with a
+  controlled library environment. This snap does not redistribute DaVinci
+  Resolve; the Blackmagic Design installer must already be installed on the
+  host.
+
+grade: devel
+confinement: classic
+license: MIT
+
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
+
+apps:
+  davinci-resolve-host:
+    command: bin/davinci-resolve-wrapper
+    desktop: meta/gui/davinci-resolve-host.desktop
+
+parts:
+  launcher:
+    plugin: nil
+    override-build: |
+      install -Dm755 "$CRAFT_PROJECT_DIR/bin/davinci-resolve-wrapper" \
+        "$CRAFT_PART_INSTALL/bin/davinci-resolve-wrapper"
+
