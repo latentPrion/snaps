@@ -1,9 +1,9 @@
 *.snap
 *.snap-build
-parts/
-prime/
-stage/
-snap/.snapcraft/
-.snapcraft/
-.craft/
-squashfs-root/
+**/parts/
+**/prime/
+**/stage/
+**/snap/.snapcraft/
+**/.snapcraft/
+**/.craft/
+**/squashfs-root/
